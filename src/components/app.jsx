@@ -1,49 +1,44 @@
-import React,{ useState } from 'react'; // eslint-disable-next-line
-import PageHeader from './Header'
-import PageFooter from './PageFooter'
-import Note from './Note';
-import CreateArea from './CreateArea';
-import TempNodes from '../notes';
+import React, { useState } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import Note from "./Note";
+import CreateArea from "./CreateArea";
 
+function App() {
+  const [notes, setNotes] = useState([]);
 
+  function addNote(newNote) {
+    setNotes(prevNotes => {
+      return [...prevNotes, newNote];
+    });
+  }
 
+  function deleteNote(id) {
+    setNotes(prevNotes => {
+      return prevNotes.filter((noteItem, index) => {
+        return index !== id;
+      });
+    });
+  }
 
-function App(){
-    
-    const [Notes , serNotes] = useState(TempNodes);
-
-    function addNote(title,content,id){
-        serNotes((prev)=>{
-            return [...prev,{title:title,content:content,id:id}]
-        })
-    }
-
-    function deleteNote(id){
-    
-        serNotes((prev)=>{
-            return prev.filter((item)=> item.id!==id)
-        })
-       
-    }
-
-    return <div>
-
-        <PageHeader/>
-        <CreateArea
-            onAddNote = {addNote}
-        />
-        
-        {Notes.map((item) => {
-                return (<Note
-                    key={item.id}
-                    title = {item.title}
-                    content = {item.content}
-                    onDeleteNote ={deleteNote}
-                    id={item.id}
-                />);
-            })}
-        <PageFooter/>
+  return (
+    <div>
+      <Header />
+      <CreateArea onAdd={addNote} />
+      {notes.map((noteItem, index) => {
+        return (
+          <Note
+            key={index}
+            id={index}
+            title={noteItem.title}
+            content={noteItem.content}
+            onDelete={deleteNote}
+          />
+        );
+      })}
+      <Footer />
     </div>
+  );
 }
 
 export default App;
